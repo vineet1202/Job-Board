@@ -21,6 +21,10 @@ app.use(cors({ origin: process.env.ORIGIN, credentials: true }));
 
 app.use("/user", userRouter);
 
+app.get("/", (req, res) => {
+  res.json("Server running");
+});
+
 app.listen(PORT, () => {
   console.log(`server is running on port ${PORT}`);
 });
