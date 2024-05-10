@@ -81,7 +81,6 @@ const handleUserLogin = async (req, res) => {
       httpOnly: true,
       secure: true,
       SameSite: "None",
-      domain: process.env.ORIGIN,
     };
 
     return res
@@ -119,7 +118,6 @@ const logoutUser = async (req, res) => {
     .clearCookie("accessToken", options)
     .clearCookie("refreshToken", options)
     .json({ msg: "User logged out" });
-  k;
 };
 
 const refreshAccessToken = async (req, res) => {
