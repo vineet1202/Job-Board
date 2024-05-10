@@ -77,10 +77,11 @@ const handleUserLogin = async (req, res) => {
     const { accessToken, refreshToken } = await generateAccessAndRefereshTokens(
       user._id
     );
-
+    console.log(process.env.ORIGIN);
     const options = {
       httpOnly: true,
       secure: true,
+      SameSite: "None",
     };
 
     return res

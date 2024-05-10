@@ -24,7 +24,7 @@ const Navbar = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:4000/user/logout",
+        `${import.meta.env.VITE_BACKEND_URL}/user/logout`,
         null,
         {
           withCredentials: true,
