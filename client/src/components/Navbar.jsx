@@ -85,9 +85,11 @@ const Navbar = () => {
               For Companies
             </p>
           </Link>
-          <p className=" sm:hidden block w-fit mx-auto px-3 py-2 rounded-lg  hover:cursor-pointer ">
-            Log in
-          </p>
+          <Link to="/auth/login">
+            <p className=" sm:hidden block w-fit mx-auto px-3 py-2 rounded-lg  hover:cursor-pointer ">
+              Log in
+            </p>
+          </Link>
         </nav>
       )}
       {user.token ? (

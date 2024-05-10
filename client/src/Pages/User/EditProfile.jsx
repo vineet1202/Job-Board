@@ -77,7 +77,7 @@ const EditProfile = () => {
     if (userData) {
       setValue("name", userData.name);
       setValue("location", userData.location);
-      setValue("bio", userData.location);
+      setValue("bio", userData.bio);
       setValue("role", userData.role);
       setValue("experience", userData.experience);
       setValue("linkedin", userData.linkedin);
@@ -87,9 +87,11 @@ const EditProfile = () => {
       setValue("degree", userData.degree);
       setValue("major", userData.major);
       setValue("gpa", userData.gpa);
-      setValue("skills", userData.skills);
-      setValue("achievments", userData.achievements);
-      setValue("projects", userData.projects);
+      setValue("achievements", userData.achievements);
+      setValue("project_link_1", userData.project_link_1);
+      setValue("project_link_2", userData.project_link_2);
+      setValue("project_link_3", userData.project_link_3);
+      setTags(userData.skills);
     }
   }, [userData]);
 
@@ -247,6 +249,7 @@ const EditProfile = () => {
             <input
               className={styles.input}
               type="number"
+              step="0.01"
               {...register("gpa", { min: 0, max: 10 })}
             />
             {errors.gpa && (
@@ -304,7 +307,7 @@ const EditProfile = () => {
         </section>
         <section className=" px-6 py-4 lg:flex">
           <div className=" w-2/5">
-            <h1 className="text-lg font-medium">Achievments</h1>
+            <h1 className="text-lg font-medium">Achievements</h1>
           </div>
           <div className="w-11/12 lg:w-4/5">
             <textarea

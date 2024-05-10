@@ -24,10 +24,10 @@ const User = () => {
   useEffect(() => {
     if (!user.token || !user.name) {
       const redirect = path;
-
+      console.log("redirecting...");
       navigate(`/auth/login?redirect=${redirect}`);
     }
-  }, []);
+  });
 
   return (
     <>

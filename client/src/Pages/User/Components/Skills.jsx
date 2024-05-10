@@ -52,17 +52,18 @@ const Skills = ({ tags, setTags }) => {
 
       <div className="w-11/12 lg:w-4/5">
         <div className="flex flex-wrap">
-          {tags.map((tag, i) => (
-            <div
-              className=" bg-slate-200 w-fit py-1 px-3 rounded m-1 text-lg flex"
-              key={tag}
-            >
-              {tag}
-              <button onClick={() => deleteTag(i)} className=" ml-3">
-                <CloseIcon />
-              </button>
-            </div>
-          ))}
+          {tags &&
+            tags.map((tag, i) => (
+              <div
+                className=" bg-slate-200 w-fit py-1 px-3 rounded m-1 text-lg flex"
+                key={tag}
+              >
+                {tag}
+                <button onClick={() => deleteTag(i)} className=" ml-3">
+                  <CloseIcon />
+                </button>
+              </div>
+            ))}
         </div>
         <input
           className={styles.input}
