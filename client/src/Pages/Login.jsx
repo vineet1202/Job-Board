@@ -57,9 +57,16 @@ const Login = () => {
         dispatch(update({ token: data.accessToken, ...userData }));
       }
     } catch (error) {
-      toast.error("Something went wrong!", {
-        position: "top-right",
-      });
+      if (error.response.status === 401) {
+        toast.error("Invalid Credentials!", {
+          position: "top-right",
+        });
+      } else {
+        toast.error("Something went wrong!", {
+          position: "top-right",
+        });
+      }
+
       console.error(error);
     } finally {
       setLoading(false);

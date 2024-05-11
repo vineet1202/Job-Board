@@ -71,7 +71,7 @@ const handleUserLogin = async (req, res) => {
     const isPasswordValid = await user.isPasswordCorrect(password);
 
     if (!isPasswordValid) {
-      return res.status(400).json({ msg: "Password is not valid" });
+      return res.status(401).json({ msg: "Password is not valid" });
     }
 
     const { accessToken, refreshToken } = await generateAccessAndRefereshTokens(

@@ -53,13 +53,20 @@ const Navbar = () => {
     };
   });
 
+  useEffect(() => {
+    const handleOverflow = () => {
+      document.body.style.overflow = isOpen ? "hidden" : "unset";
+    };
+
+    handleOverflow();
+
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [isOpen]);
+
   const handleScreenNav = () => {
     setIsOpen(!isOpen);
-    if (typeof window != "undefined" && window.document && !isOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "unset";
-    }
   };
 
   return (
