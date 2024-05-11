@@ -53,13 +53,17 @@ const SavedJobs = () => {
           withCredentials: true,
         }
       );
+
+      getSavedJobs();
       if (response.status === 200) {
         toast.success("Job Removed! ", {
           position: "top-right",
         });
-        window.location.reload();
       }
     } catch (e) {
+      toast.error("Something went wrong! ", {
+        position: "top-right",
+      });
       console.error(e);
     }
   };

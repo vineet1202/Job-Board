@@ -53,6 +53,15 @@ const Navbar = () => {
     };
   });
 
+  const handleScreenNav = () => {
+    setIsOpen(!isOpen);
+    if (typeof window != "undefined" && window.document && !isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+  };
+
   return (
     <header className=" lg:w-11/12  mx-auto sm:flex px-8 py-4 sm:py-3  sm:justify-between items-center bg-white">
       <div className="flex justify-between text-2xl ">
@@ -63,7 +72,7 @@ const Navbar = () => {
         </Link>
         {!user.token && (
           <div className="sm:hidden z-40  ">
-            <button onClick={() => setIsOpen(!isOpen)}>
+            <button onClick={handleScreenNav}>
               {!isOpen ? <IoMenu /> : <IoClose />}
             </button>
           </div>
@@ -73,10 +82,10 @@ const Navbar = () => {
         <nav
           className={`${
             isOpen ? `block h-screen sm:h-auto` : `hidden `
-          }  sm:flex sm:p-0 text-2xl  lg:text-xl transition ease-in-out duration-500  py-12 text-center`}
+          }   sm:flex sm:p-0 text-2xl  lg:text-xl transition ease-in-out duration-500  py-12 text-center`}
         >
-          <Link to="/profile/jobs">
-            <p className="  font-medium block w-fit mx-auto px-3 py-2 rounded-lg lg:rounded-none hover:cursor-pointer hover:text-blue-700 hover:underline">
+          <Link to="/profile/jobs ">
+            <p className="mt-32 sm:mt-0 font-medium block w-fit mx-auto px-3 py-2 rounded-lg lg:rounded-none hover:cursor-pointer hover:text-blue-700 hover:underline">
               Find Jobs
             </p>
           </Link>
@@ -86,7 +95,7 @@ const Navbar = () => {
             </p>
           </Link>
           <Link to="/auth/login">
-            <p className=" sm:hidden block w-fit mx-auto px-3 py-2 rounded-lg  hover:cursor-pointer ">
+            <p className=" font-medium sm:hidden block w-fit mx-auto px-3 py-2 rounded-lg  hover:cursor-pointer hover:text-blue-700 hover:underline">
               Log in
             </p>
           </Link>

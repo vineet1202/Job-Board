@@ -67,6 +67,15 @@ const PostJob = () => {
             {...register("company")}
             required
           />
+          <h1 className="   justify-center text-lg  font-medium ">
+            Company Logo
+          </h1>
+          <input
+            className={styles.input}
+            type="text"
+            {...register("logo")}
+            placeholder="url"
+          />
 
           <h1 className="  justify-center text-lg  font-medium ">
             Job Location*
@@ -79,7 +88,9 @@ const PostJob = () => {
             required
           />
 
-          <h1 className="  justify-center text-lg  font-medium ">Job Type*</h1>
+          <h1 className="  justify-center text-lg  font-medium ">
+            Location Type*
+          </h1>
           <select
             {...register("type")}
             className=" mb-4 w-full border text-lg my-1 px-4 py-1.5 rounded border-slate-400 "
@@ -90,9 +101,7 @@ const PostJob = () => {
             <option>On-Site</option>
             <option>Remote</option>
           </select>
-          <h1 className="  justify-center text-lg  font-medium ">
-            Location Type*
-          </h1>
+          <h1 className="  justify-center text-lg  font-medium ">Job Type*</h1>
           <select
             {...register("location_type")}
             className=" mb-4 w-full border text-lg my-1 px-4 py-1.5 rounded border-slate-400 "

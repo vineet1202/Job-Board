@@ -306,7 +306,9 @@ const removeJob = asyncHandler(async (req, res) => {
     );
     await user.save();
 
-    return res.status(200).json({ msg: "Successfull" });
+    return res
+      .status(200)
+      .json(new ApiResponse(200, user.saved_jobs, "successfull"));
   } catch (e) {
     console.error(e);
   }

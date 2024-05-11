@@ -91,10 +91,10 @@ const Signup = () => {
           </button>
 
           <p className="mx-2 mt-4  text-center font-medium">
-            Already have an account?{" "}
-            <a href="/auth/login" className="underline hover:text-blue-700">
+            Already have an account?
+            <Link to="/auth/login" className="underline hover:text-blue-700">
               Log in
-            </a>
+            </Link>
           </p>
         </div>
       </div>
