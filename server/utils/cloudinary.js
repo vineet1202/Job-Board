@@ -1,5 +1,4 @@
-const cloudinary = require("cloudinary");
-// {v2 as cloudinary} from
+const cloudinary = require("cloudinary").v2;
 const fs = require("fs");
 
 cloudinary.config({
@@ -15,9 +14,8 @@ const uploadOnCloudinary = async (localFilePath) => {
     }
     //upload file
     const response = await cloudinary.uploader.upload(localFilePath, {
-      resource_type: "auto",
+      resource_type: "raw",
     });
-    console.log("file has been uploaded successfully");
     fs.unlinkSync(localFilePath); //remove the locally saved
     return response;
   } catch (error) {

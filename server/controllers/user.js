@@ -1,9 +1,7 @@
 const User = require("../models/user");
 const ApiResponse = require("../utils/ApiResponse.js");
-// const uploadOnCloudinary = require("../utils/cloudinary.js");
-const cloudinary = require("cloudinary");
+const uploadOnCloudinary = require("../utils/cloudinary.js");
 const asyncHandler = require("../utils/asyncHandler.js");
-const fs = require("fs");
 const ApiError = require("../utils/ApiError.js");
 const Job = require("../models/job");
 const jwt = require("jsonwebtoken");
@@ -165,30 +163,8 @@ const refreshAccessToken = async (req, res) => {
   }
 };
 
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
-});
-
-const uploadOnCloudinary = async (localFilePath) => {
-  try {
-    if (!localFilePath) {
-      return null;
-    }
-    //upload file
-    const response = await cloudinary.uploader.upload(localFilePath, {
-      resource_type: "raw",
-    });
-    fs.unlinkSync(localFilePath); //remove the locally saved
-    return response;
-  } catch (error) {
-    fs.unlinkSync(localFilePath);
-    return null;
-  }
-};
-
 const updateResume = async (req, res) => {
+  console.log(req.file);
   const resumefilePath = req.file?.path;
 
   if (!resumefilePath) {
