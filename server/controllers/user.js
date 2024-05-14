@@ -5,6 +5,7 @@ const asyncHandler = require("../utils/asyncHandler.js");
 const ApiError = require("../utils/ApiError.js");
 const Job = require("../models/job");
 const jwt = require("jsonwebtoken");
+const ms = require("ms");
 
 const generateAccessAndRefereshTokens = async (userId) => {
   try {
@@ -51,7 +52,7 @@ const handleUserSignup = async (req, res) => {
     });
     return res.status(200).json({ msg: "Signup successfull" });
   } catch (e) {
-    res.status(400).json(e);
+    throw new ApiError(500, "Something went wrong while signing up", e);
   }
 };
 
@@ -75,22 +76,37 @@ const handleUserLogin = async (req, res) => {
     const { accessToken, refreshToken } = await generateAccessAndRefereshTokens(
       user._id
     );
-    const options = {
-      httpOnly: true,
-      secure: true,
-      sameSite: "none",
-    };
+
+    const expiresAt = new Date(
+      Date.now() + ms(process.env.ACCESS_TOKEN_EXPIRY)
+    );
 
     return res
       .status(200)
-      .cookie("accessToken", accessToken, options)
-      .cookie("refreshToken", refreshToken, options)
+      .cookie("accessToken", accessToken, {
+        httpOnly: true,
+        secure: true,
+        sameSite: "none",
+        expires: new Date(Date.now() + ms(process.env.ACCESS_TOKEN_EXPIRY)),
+      })
+      .cookie("refreshToken", refreshToken, {
+        httpOnly: true,
+        secure: true,
+        sameSite: "none",
+        expires: new Date(Date.now() + ms(process.env.REFRESH_TOKEN_EXPIRY)),
+      })
       .json({
-        user: { name: user.name, email: user.email, accessToken, refreshToken },
+        user: {
+          name: user.name,
+          email: user.email,
+          accessToken,
+          refreshToken,
+          expiresAt,
+        },
         msg: "User logged in successfully",
       });
   } catch (error) {
-    console.error(error);
+    throw new ApiError(401, "Login Failed");
   }
 };
 
@@ -137,59 +153,65 @@ const refreshAccessToken = async (req, res) => {
       throw new ApiError(401, "Invalid Refresh Token");
     }
 
-    //mathcing incoming refreshToken with user's refreshToken
+    //matching incoming refreshToken with user's refreshToken
     if (incomingRefreshToken !== user?.refreshToken) {
       throw new ApiError(401, "Refresh Token is expired or used");
     }
 
-    const options = {
-      httpOnly: true,
-      secure: true,
-    };
+    const { accessToken, refreshToken } = await generateAccessAndRefereshTokens(
+      user._id
+    );
 
-    const { accessToken, newRefreshToken } =
-      await generateAccessAndRefereshTokens(user._id);
     return res
       .status(200)
-      .cookie("accessToken", accessToken, options)
-      .cookie("refreshToken", newRefreshToken, options)
+      .cookie("accessToken", accessToken, {
+        httpOnly: true,
+        secure: true,
+        sameSite: "none",
+        expires: new Date(Date.now() + ms(process.env.ACCESS_TOKEN_EXPIRY)),
+      })
+      .cookie("refreshToken", refreshToken, {
+        httpOnly: true,
+        secure: true,
+        sameSite: "none",
+        expires: new Date(Date.now() + ms(process.env.REFRESH_TOKEN_EXPIRY)),
+      })
       .json({
         accessToken,
-        refreshToken: newRefreshToken,
+        refreshToken: refreshToken,
+        expiresAt: new Date(Date.now() + ms(process.env.ACCESS_TOKEN_EXPIRY)),
         msg: "Access Token Refreshed",
       });
   } catch (e) {
-    throw new ApiError(401, error?.message || "Invalid refresh token");
+    throw new ApiError(401, "Invalid refresh token");
   }
 };
 
 const updateResume = async (req, res) => {
-  console.log(req.file);
-  const resumefilePath = req.file?.path;
+  try {
+    const resumefilePath = req.file?.path;
 
-  if (!resumefilePath) {
-    return res.status(400).json({ msg: "Resume file is required" });
-  }
-  const resume = await uploadOnCloudinary(resumefilePath);
-  if (!resume.url) {
-    return res.status(400).json({ msg: "Error while uploading" });
-  }
+    if (!resumefilePath) {
+      return res.status(400).json({ msg: "Resume file is required" });
+    }
+    const resume = await uploadOnCloudinary(resumefilePath);
+    if (!resume.url) {
+      return res.status(500).json({ msg: "Error while uploading" });
+    }
 
-  await User.findByIdAndUpdate(
-    req.user?._id,
-    {
-      $set: {
-        resume: resume.url.replace(".pdf", ".jpg"),
+    await User.findByIdAndUpdate(
+      req.user?._id,
+      {
+        $set: {
+          resume: resume.url.replace(".pdf", ".jpg"),
+        },
       },
-    },
-    { new: true }
-  );
-  return (
-    res
-      .status(200)
-      // .json(new ApiResponse(200, user, "Resume updated successfully"))
-      .json({ msg: "Successfull" })
-  );
+      { new: true }
+    );
+    return res.json(new ApiResponse(200, "Resume updated successfully"));
+  } catch (e) {
+    throw new ApiError(500, "Something went wrong while updating resume", e);
+  }
 };
 
 const changeCurrentPassword = async (req, res) => {
@@ -213,31 +235,34 @@ const getUser = async (req, res) => {
 
 //update whatever is avalaible
 const updateProfile = asyncHandler(async (req, res) => {
-  const { data, skills } = req.body;
+  try {
+    const { data, skills } = req.body;
 
-  await User.findByIdAndUpdate(
-    req.user?._id,
-    {
-      $set: { ...data, skills, saved_jobs: [] },
-    },
-    { new: true }
-  );
+    await User.findByIdAndUpdate(
+      req.user?._id,
+      {
+        $set: { ...data, skills, saved_jobs: [] },
+      },
+      { new: true }
+    );
 
-  return (
-    res
-      .status(200)
-      // .json(new ApiResponse(200, user, "Account updated Successfully"));
-      .json({ msg: "Account updated Successfully" })
-  );
+    return res.json(new ApiResponse(200, "Account updated Successfully"));
+  } catch (e) {
+    throw new ApiError(500, "Something went wrong while updating Profile", e);
+  }
 });
 
 const postJob = asyncHandler(async (req, res) => {
-  const { data, desc } = req.body;
-  await Job.create({
-    ...data,
-    desc,
-  });
-  return res.status(200).json({ msg: "Job posted successfully" });
+  try {
+    const { data, desc } = req.body;
+    await Job.create({
+      ...data,
+      desc,
+    });
+    return res.status(200).json({ msg: "Job posted successfully" });
+  } catch (e) {
+    throw new ApiError(500, "Something went wrong while Posting Job");
+  }
 });
 
 const getJobs = asyncHandler(async (req, res) => {

@@ -2,17 +2,24 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { update } from "../store/features/userSlice";
-import { setItem } from "../Functions/storage";
+import { login } from "../../store/features/userSlice";
+
+import { setItem } from "../../Functions/storage";
 import { Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useLocation } from "react-router-dom";
 
 const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
   const [loading, setLoading] = useState(false);
+
+  const location = useLocation();
+  const query = location.search;
+  const params = new URLSearchParams(query);
+  const redirectPath = params.get("redirect");
 
   const [formData, setFormData] = useState({
     email: "",
@@ -27,7 +34,9 @@ const Login = () => {
   };
 
   useEffect(() => {
-    if (user.token) {
+    if (user.token && redirectPath) {
+      navigate(redirectPath);
+    } else if (user.token) {
       navigate("/profile/jobs");
     }
   }, [user]);
@@ -36,6 +45,7 @@ const Login = () => {
     e.preventDefault();
     try {
       setLoading(true);
+
       const response = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/user/login`,
         {
@@ -53,8 +63,17 @@ const Login = () => {
 
       if (response.status === 200) {
         setItem("token", data.accessToken);
+        setItem("expiresAt", data.expiresAt);
         setItem("info", JSON.stringify(userData));
-        dispatch(update({ token: data.accessToken, ...userData }));
+        setItem("isAuthenticated", true);
+        dispatch(
+          login({
+            token: data.accessToken,
+            expiresAt: data.expiresAt,
+            name: data.name,
+            email: data.email,
+          })
+        );
       }
     } catch (error) {
       if (error.response.status === 401) {

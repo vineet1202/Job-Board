@@ -38,7 +38,7 @@ const PostJob = () => {
         reset();
       }
     } catch (e) {
-      console.log(e);
+      console.error(e);
       toast.error("Failed. Please Try again later !", {
         position: "top-right",
       });
@@ -118,7 +118,7 @@ const PostJob = () => {
             className={styles.input}
             type="text"
             {...register("salary")}
-            placeholder="in Rupees "
+            placeholder="(in Rupees) e.g. 50k / 15Lpa / Not Disclosed "
           />
 
           <h1 className="   justify-center text-lg  font-medium ">

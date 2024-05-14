@@ -21,7 +21,9 @@ const SavedJobs = () => {
       );
       setSavedJobs(response.data.data);
     } catch (e) {
-      console.log(e);
+      toast.error("Failed. Please Try again later !", {
+        position: "top-right",
+      });
     } finally {
       setLoading(false);
     }

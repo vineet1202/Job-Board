@@ -17,7 +17,6 @@ const Jobs = () => {
           withCredentials: true,
         }
       );
-
       setData(response.data.data);
     } catch (e) {
       console.log(e);
@@ -176,15 +175,22 @@ const Jobs = () => {
                     </p>
                   </div>
                 </div>
-                <div className="flex p-1 items-center mt-4  text-lg text-slate-600">
+
+                <div className="flex items-center mt-4  text-lg text-slate-600">
+                  {item.max_salary !== null && item.min_salary !== null ? (
+                    <p className="flex p-1 items-center text-lg text-slate-600">
+                      ₹{item.min_salary} - ₹{item.max_salary}
+                    </p>
+                  ) : (
+                    <p>₹ Not Disclosed</p>
+                  )}
+                </div>
+                <div className=" flex  items-center text-lg text-slate-600">
+                  {/* <div className="flex p-1 items-center mt-4  text-lg text-slate-600"> */}
                   <LocationIcon />
                   <p>{item.location}</p>
                 </div>
-                {item.max_salary !== null && item.min_salary !== null && (
-                  <p className="flex p-1 items-center text-lg text-slate-600">
-                    ₹{item.min_salary} - ₹{item.max_salary}
-                  </p>
-                )}
+
                 <p className="flex text-lg items-center text-slate-600  pl-1">
                   {getDays(item.updatedAt) === 0 ? (
                     <>
@@ -203,7 +209,7 @@ const Jobs = () => {
                     className="float-right  hover:cursor-pointer  px-2 py-0.5 bg-blue-950 text-white rounded hover:bg-blue-600"
                     onClick={() => handleBookmark(item._id)}
                   >
-                    Save Job
+                    Save
                   </button>
                 </p>
                 <ToastContainer autoClose={1500} />

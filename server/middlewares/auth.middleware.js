@@ -2,6 +2,7 @@
 
 const jwt = require("jsonwebtoken");
 const User = require("../models/user");
+const ApiError = require("../utils/ApiError.js");
 
 const verifyJWT = async (req, res, next) => {
   try {
@@ -10,9 +11,7 @@ const verifyJWT = async (req, res, next) => {
       req.header("Authorization")?.replace("Bearer", "");
 
     if (!token) {
-      return res
-        .status(401)
-        .json({ msg: "Session timed out. Please login again" });
+      throw new ApiError(401, "Unauthorized request");
     }
 
     const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
@@ -20,13 +19,13 @@ const verifyJWT = async (req, res, next) => {
     const user = await User.findById(decodedToken?._id);
 
     if (!user) {
-      return res.status(400).json({ msg: "Invalid access token" });
+      throw new ApiError(401, "Invalid access token");
     }
 
     req.user = user;
     next();
   } catch (error) {
-    console.error(error);
+    throw new ApiError(401, error?.message || "Invalid access token");
   }
 };
 

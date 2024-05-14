@@ -12,7 +12,6 @@ const EditResume = () => {
       pdf: e.target.files[0],
     });
   };
-  console.log(pdfData);
 
   const saveFile = async (e) => {
     try {

@@ -42,11 +42,15 @@ const userSchema = new Schema(
     major: { type: String },
     gpa: { type: Number },
     resume: { type: String }, //cloudinary url
-    // projects: { type: [] },
+    project_name_1: { type: String },
+    project_name_2: { type: String },
+    project_name_3: { type: String },
     project_link_1: { type: String },
     project_link_2: { type: String },
     project_link_3: { type: String },
+
     achievements: { type: String },
+
     applied_to: { type: Schema.Types.ObjectId, ref: "Job" }, //jobs applied to
     saved_jobs: [{ type: Schema.Types.ObjectId, ref: "Job" }],
     refreshToken: {
@@ -73,7 +77,10 @@ userSchema.methods.generateAccessToken = async function () {
       _id: this._id,
       email: this.email,
     },
-    process.env.ACCESS_TOKEN_SECRET
+    process.env.ACCESS_TOKEN_SECRET,
+    {
+      expiresIn: process.env.ACCESS_TOKEN_EXPIRY,
+    }
   );
 };
 

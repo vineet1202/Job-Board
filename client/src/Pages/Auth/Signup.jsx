@@ -36,6 +36,10 @@ const Signup = () => {
         navigate("/auth/login");
       }
     } catch (error) {
+      toast.error("Something went wrong", {
+        position: "top-right",
+      });
+
       console.error(error);
     }
   };

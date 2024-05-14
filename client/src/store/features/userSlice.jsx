@@ -4,6 +4,8 @@ const initialState = {
   name: "",
   email: "",
   token: "",
+  expiresAt: "",
+  isAuthenticated: false,
 };
 
 const userSlice = createSlice({
@@ -19,9 +21,20 @@ const userSlice = createSlice({
     update(state, { payload }) {
       return { ...state, ...payload };
     },
+
+    login(state, { payload }) {
+      return {
+        name: payload.name,
+        email: payload.email,
+        status: "succeeded",
+        isAuthenticated: true,
+        token: payload.token,
+        expiresAt: payload.expiresAt,
+      };
+    },
   },
 });
 
 //export actions and slice
-export const { reset, updateToken, update } = userSlice.actions;
+export const { reset, updateToken, update, login } = userSlice.actions;
 export default userSlice.reducer;

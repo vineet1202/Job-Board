@@ -33,6 +33,9 @@ const Navbar = () => {
       if (response.status == 200) {
         removeItem("info");
         removeItem("token");
+        removeItem("expiresAt");
+        removeItem("isAuthenticated");
+
         dispatch(reset());
       }
     } catch (error) {

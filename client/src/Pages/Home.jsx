@@ -34,7 +34,7 @@ const Home = () => {
             <div className="mt-4 *:flex *:my-3">
               <div>
                 <CheckedIcon className="text-2xl mr-1 lg:mr-3" />
-                <p>Connect directly with founders at top sddddd ddd tartups.</p>
+                <p>Connect directly with founders at top startups.</p>
               </div>
               <div>
                 <CheckedIcon className="text-4xl mr-1 md:text-2xl lg:mr-3" />

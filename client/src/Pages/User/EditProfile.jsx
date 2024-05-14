@@ -65,7 +65,9 @@ const EditProfile = () => {
         setUserData(response.data.data);
       }
     } catch (e) {
-      console.log(e);
+      toast.error("Failed to Load User Profile. Please Try again later !", {
+        position: "top-right",
+      });
     }
   };
 
@@ -88,6 +90,9 @@ const EditProfile = () => {
       setValue("major", userData.major);
       setValue("gpa", userData.gpa);
       setValue("achievements", userData.achievements);
+      setValue("project_name_1", userData.project_name_1);
+      setValue("project_name_2", userData.project_name_2);
+      setValue("project_name_3", userData.project_name_3);
       setValue("project_link_1", userData.project_link_1);
       setValue("project_link_2", userData.project_link_2);
       setValue("project_link_3", userData.project_link_3);
@@ -267,42 +272,66 @@ const EditProfile = () => {
           </div>
           <div className="w-11/12 lg:w-4/5 *:mb-2">
             <p className={`${styles.label} items-center`}>Project Details</p>
-            <input
-              className={styles.input}
-              type="text"
-              {...register("project_link_1", {
-                pattern:
-                  /^(https?|ftp):\/\/(([a-z\d]([a-z\d-]*[a-z\d])?\.)+[a-z]{2,}|localhost)(\/[-a-z\d%_.~+]*)*(\?[;&a-z\d%_.~+=-]*)?(\#[-a-z\d_]*)?$/i,
-              })}
-              placeholder="Project 1 Link"
-            />
-            {errors.project_link_1 && (
-              <span className="text-red-600">Enter a valid url</span>
-            )}
-            <input
-              className={styles.input}
-              type="text"
-              {...register("project_link_2", {
-                pattern:
-                  /^(https?|ftp):\/\/(([a-z\d]([a-z\d-]*[a-z\d])?\.)+[a-z]{2,}|localhost)(\/[-a-z\d%_.~+]*)*(\?[;&a-z\d%_.~+=-]*)?(\#[-a-z\d_]*)?$/i,
-              })}
-              placeholder="Project 2 Link"
-            />
-            {errors.project_link_2 && (
-              <span className="text-red-600">Enter a valid url</span>
-            )}
-            <input
-              className={styles.input}
-              type="text"
-              {...register("project_link_3", {
-                pattern:
-                  /^(https?|ftp):\/\/(([a-z\d]([a-z\d-]*[a-z\d])?\.)+[a-z]{2,}|localhost)(\/[-a-z\d%_.~+]*)*(\?[;&a-z\d%_.~+=-]*)?(\#[-a-z\d_]*)?$/i,
-              })}
-              placeholder="Project 3 Link"
-            />
-            {errors.project_link_3 && (
-              <span className="text-red-600">Enter a valid url</span>
-            )}
+            <div className=" sm:flex">
+              <input
+                className={`${styles.input} mr-2`}
+                type="text"
+                {...register("project_name_1")}
+                placeholder="Project 1 Name"
+              />
+              <input
+                className={styles.input}
+                type="text"
+                {...register("project_link_1", {
+                  pattern:
+                    /^(https?|ftp):\/\/(([a-z\d]([a-z\d-]*[a-z\d])?\.)+[a-z]{2,}|localhost)(\/[-a-z\d%_.~+]*)*(\?[;&a-z\d%_.~+=-]*)?(\#[-a-z\d_]*)?$/i,
+                })}
+                placeholder="Project 1 Link"
+              />
+              {errors.project_link_1 && (
+                <span className="text-red-600">Enter a valid url</span>
+              )}
+            </div>
+            <div className=" sm:flex">
+              <input
+                className={`${styles.input} mr-2`}
+                type="text"
+                {...register("project_name_2")}
+                placeholder="Project 2 Name"
+              />
+              <input
+                className={styles.input}
+                type="text"
+                {...register("project_link_2", {
+                  pattern:
+                    /^(https?|ftp):\/\/(([a-z\d]([a-z\d-]*[a-z\d])?\.)+[a-z]{2,}|localhost)(\/[-a-z\d%_.~+]*)*(\?[;&a-z\d%_.~+=-]*)?(\#[-a-z\d_]*)?$/i,
+                })}
+                placeholder="Project 2 Link"
+              />
+              {errors.project_link_2 && (
+                <span className="text-red-600">Enter a valid url</span>
+              )}
+            </div>
+            <div className=" sm:flex">
+              <input
+                className={`${styles.input} mr-2`}
+                type="text"
+                {...register("project_name_3")}
+                placeholder="Project 3 Name"
+              />
+              <input
+                className={styles.input}
+                type="text"
+                {...register("project_link_3", {
+                  pattern:
+                    /^(https?|ftp):\/\/(([a-z\d]([a-z\d-]*[a-z\d])?\.)+[a-z]{2,}|localhost)(\/[-a-z\d%_.~+]*)*(\?[;&a-z\d%_.~+=-]*)?(\#[-a-z\d_]*)?$/i,
+                })}
+                placeholder="Project 3 Link"
+              />
+              {errors.project_link_3 && (
+                <span className="text-red-600">Enter a valid url</span>
+              )}
+            </div>
           </div>
         </section>
         <section className=" px-6 py-4 lg:flex">

@@ -1,7 +1,8 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
-import Login from "../Login";
-import Signup from "../Signup";
+
+import Login from "./Login";
+import Signup from "./Signup";
 
 const Auth = () => {
   return (

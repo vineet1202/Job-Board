@@ -6,10 +6,13 @@ import styles from "./User.module.css";
 import { FaLinkedinIn as LinkedinIcon } from "react-icons/fa";
 import { FaGithub as GithubIcon } from "react-icons/fa";
 import { FaLink as LinkIcon } from "react-icons/fa6";
+import { useNavigate } from "react-router-dom";
 
 const ProfileOverview = () => {
   const [userDetails, setUserDetails] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+
   const getUser = async () => {
     try {
       const response = await axios.get(
@@ -20,7 +23,10 @@ const ProfileOverview = () => {
       );
       setUserDetails(response.data.data);
     } catch (e) {
-      console.log(e);
+      toast.error("Something went wrong !", {
+        position: "top-right",
+      });
+      navigate("*");
     } finally {
       setLoading(false);
     }
@@ -56,10 +62,10 @@ const ProfileOverview = () => {
               <p className={styles.small}>{userDetails.location}</p>
             </div>
             <div className="flex mt-2 md:p-2 h-fit *:mx-1 items-center">
-              <Link to={userDetails.linkedin}>
+              <Link to={userDetails.linkedin} target="_blank">
                 <LinkedinIcon className="text-sm sm:text-xl text-blue-700" />
               </Link>
-              <Link to={userDetails.github}>
+              <Link to={userDetails.github} target="_blank">
                 <GithubIcon className="text-sm sm:text-xl" />
               </Link>
               <Link
@@ -70,6 +76,7 @@ const ProfileOverview = () => {
               </Link>
               <Link
                 to={userDetails.resume}
+                target="_blank"
                 className="text-sm sm:text-base rounded border p-0.5 bg-slate-200 text-slate-800"
               >
                 Resume
@@ -106,33 +113,44 @@ const ProfileOverview = () => {
           </div>
           <div className="border-b border-slate-300 mb-4 pb-3">
             <h1 className={styles.profile_header}>Projects</h1>
-            <div className="mt-2 rounded w-1/2 flex items-center  justify-between hover:bg-slate-100 px-1.5 ">
-              <p className="text-lg  pl-4">Project 1</p>
-              <Link
-                className="text-lg text-slate-600 hover:underline hover:text-blue-700 font-medium"
-                to={userDetails.project_link_1}
-              >
-                <LinkIcon />
-              </Link>
-            </div>
-            <div className="mt-2 rounded w-1/2 flex items-center justify-between hover:bg-slate-100 px-1.5 ">
-              <p className="text-lg  pl-4">Project 2</p>
-              <Link
-                className="text-lg text-slate-600 hover:underline hover:text-blue-700 font-medium"
-                to={userDetails.project_link_2}
-              >
-                <LinkIcon />
-              </Link>
-            </div>
-            <div className="mt-2 rounded w-1/2 flex items-center  justify-between hover:bg-slate-100 px-1.5 ">
-              <p className="text-lg  pl-4">Project 3</p>
-              <Link
-                className="text-lg text-slate-600 hover:underline hover:text-blue-700 font-medium"
-                to={userDetails.project_link_3}
-              >
-                <LinkIcon />
-              </Link>
-            </div>
+
+            {userDetails.project_name_1 && userDetails.project_link_1 ? (
+              <>
+                <div className="mt-2 rounded w-1/2 flex items-center  justify-between hover:bg-slate-100 px-1.5 ">
+                  <p className="text-lg  pl-4">{userDetails.project_name_1}</p>
+                  <Link
+                    className="text-lg text-slate-600 hover:underline hover:text-blue-700 font-medium"
+                    to={userDetails.project_link_1}
+                    target="_blank"
+                  >
+                    <LinkIcon />
+                  </Link>
+                </div>
+
+                <div className="mt-2 rounded w-1/2 flex items-center justify-between hover:bg-slate-100 px-1.5 ">
+                  <p className="text-lg  pl-4">{userDetails.project_name_2}</p>
+                  <Link
+                    className="text-lg text-slate-600 hover:underline hover:text-blue-700 font-medium"
+                    to={userDetails.project_link_2}
+                    target="_blank"
+                  >
+                    <LinkIcon />
+                  </Link>
+                </div>
+                <div className="mt-2 rounded w-1/2 flex items-center  justify-between hover:bg-slate-100 px-1.5 ">
+                  <p className="text-lg  pl-4">{userDetails.project_name_3}</p>
+                  <Link
+                    className="text-lg text-slate-600 hover:underline hover:text-blue-700 font-medium"
+                    to={userDetails.project_link_3}
+                    target="_blank"
+                  >
+                    <LinkIcon />
+                  </Link>
+                </div>
+              </>
+            ) : (
+              <p className="text-lg pl-4">No Projects Available</p>
+            )}
           </div>
           <div className=" mb-4 pb-3">
             <h1 className={styles.profile_header}>Achievments</h1>
